@@ -114,6 +114,7 @@ const struct Mapping SortMethods[] = {
  * SortSidebarMethods - Sort methods for the sidebar
  */
 const struct Mapping SortSidebarMethods[] = {
+  { "date",          SORT_DATE },
   { "alpha",         SORT_PATH },
   { "count",         SORT_COUNT },
   { "desc",          SORT_DESC },

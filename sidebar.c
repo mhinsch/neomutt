@@ -333,6 +333,11 @@ static int cb_qsort_sbe(const void *a, const void *b)
         rc = mutt_str_strcoll(mailbox_path(m1), mailbox_path(m2));
       break;
     }
+    case SORT_DATE:
+      rc = m2->mtime.tv_sec - m1->mtime.tv_sec;
+	  if (rc == 0)
+		  rc = m2->mtime.tv_nsec - m1->mtime.tv_nsec;
+	  break;
   }
 
   if (C_SidebarSortMethod & SORT_REVERSE)
@@ -445,8 +450,11 @@ static void sort_entries(void)
 {
   enum SortType ssm = (C_SidebarSortMethod & SORT_MASK);
 
+  mutt_debug(LL_DEBUG1, "Sorting sidebar: %d\n", ssm);
+
   /* These are the only sort methods we understand */
-  if ((ssm == SORT_COUNT) || (ssm == SORT_UNREAD) || (ssm == SORT_FLAGGED) || (ssm == SORT_PATH))
+  if ((ssm == SORT_COUNT) || (ssm == SORT_UNREAD) || (ssm == SORT_FLAGGED) || (ssm == SORT_PATH) || 
+	  (ssm == SORT_DATE))
     qsort(Entries, EntryCount, sizeof(*Entries), cb_qsort_sbe);
   else if ((ssm == SORT_ORDER) && (C_SidebarSortMethod != PreviousSort))
     unsort_entries();
